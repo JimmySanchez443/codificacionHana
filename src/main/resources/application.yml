@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      database: Cod
+      host: baseMongo
+      port: 27017
+

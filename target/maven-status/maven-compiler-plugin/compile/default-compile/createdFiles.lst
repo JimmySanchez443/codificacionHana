@@ -1,0 +1,15 @@
+com\api\codificacion\service\PhotoService.class
+com\api\codificacion\service\ColorsService.class
+com\api\codificacion\controller\PhotoController.class
+com\api\codificacion\controller\AnexoController.class
+com\api\codificacion\model\Photo.class
+com\api\codificacion\repository\ColorsRepository.class
+com\api\codificacion\controller\ColorsController.class
+com\api\codificacion\model\Anexo.class
+com\api\codificacion\model\AnexoProjectionDto.class
+com\api\codificacion\repository\PhotoRepository.class
+com\api\codificacion\CodificacionApplication.class
+com\api\codificacion\model\Colors.class
+com\api\codificacion\model\PatchDto.class
+com\api\codificacion\service\AnexoService.class
+com\api\codificacion\repository\AnexoRepository.class
