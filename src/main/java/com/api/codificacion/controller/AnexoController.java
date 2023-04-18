@@ -56,9 +56,28 @@ public class AnexoController {
 		return anexoService.findById(id).get();
 	}
 
+	// Buscar por sa_anexo
 	@GetMapping("/anexos/sa/{sa_anexo}")
 	public List<Anexo> findBySaAnexo(@PathVariable String sa_anexo) {
 		return anexoService.findBySaAnexo(sa_anexo);
+	}
+
+	// Buscar por modelo
+	@GetMapping("/anexos/mod/{uargnsmod}")
+	public List<Anexo> findByUargnsmod(@PathVariable String uargnsmod) {
+		return anexoService.findByUargnsmod(uargnsmod);
+	}
+
+	// Cantidad, busqueda por modelo
+	@GetMapping("/anexos/cxm/{uargnsmod}")
+	public ResponseEntity<?> countByUargnsmod(@PathVariable String uargnsmod) {
+		long count = anexoService.countByUargnsmod(uargnsmod);
+		if (count == 0) {
+			//return ResponseEntity.noContent().build();
+			return ResponseEntity.ok(count);
+		} else {
+			return ResponseEntity.ok(count);
+		}
 	}
 
 	@GetMapping("/anexos/mayor/{uargnsmod}")
@@ -97,16 +116,16 @@ public class AnexoController {
 	@ResponseBody
 	public ResponseEntity<Void> updatePatch(@PathVariable String id, @RequestBody PatchDto dto) {
 		anexoService.partialUpdate(id, dto.getKey(), dto.getValue());
-		return ResponseEntity.noContent().build(); // Devuelve una respuesta HTTP 204 No Content con un objeto JSON vacío
+		return ResponseEntity.noContent().build(); // Devuelve una respuesta HTTP 204 No Content con un objeto JSON
+		// vacío
 	}
-	
 
 	// Listar solo campos id, username, sa_codetipoanexo, Sa_enviadosap, Sa_anexo
 	// filtardo por username, sa_codetipoanexo
 	// Peticion: /api/v1/anexos/projections?username=Stalyn&sa_codetipoanexo=01
 	@GetMapping("/anexos/projections")
 	public List<AnexoProjectionDto> findProjectedByIdAndSa_enviadosap(@RequestParam String username,
-			@RequestParam String sa_codetipoanexo) {
+																	  @RequestParam String sa_codetipoanexo) {
 		return anexoService.findProjectedByIdAndSa_enviadosap(username, sa_codetipoanexo);
 	}
 
@@ -115,7 +134,7 @@ public class AnexoController {
 	// /api/v1/anexos/lpu?username=Stalyn&sa_codetipoanexo=01&sa_anexo=ANEXO01
 	@GetMapping("/anexos/lpu")
 	public List<Anexo> getAnexos(@RequestParam String username, @RequestParam String sa_codetipoanexo,
-			@RequestParam String sa_anexo) {
+								 @RequestParam String sa_anexo) {
 		return anexoService.findByUsernameAndSaCodetipoanexoAndSaAnexo(username, sa_codetipoanexo, sa_anexo);
 	}
 
@@ -123,7 +142,13 @@ public class AnexoController {
 	// peticion: /api/v1/anexos/sa_anexo?username=Stalyn&sa_codetipoanexo=01
 	@GetMapping("/anexos/sa_anexo")
 	public List<String> findDistinctSa_anexoByUsernameAndSa_codetipoanexo(@RequestParam String username,
-			@RequestParam String sa_codetipoanexo) {
+																		  @RequestParam String sa_codetipoanexo) {
 		return anexoService.findDistinctSa_anexoByUsernameAndSa_codetipoanexo(username, sa_codetipoanexo);
+	}
+
+	// Ultimo codigo de barras enviando prefix 10000014
+	@GetMapping("/anexos/max-barcode/{digits}")
+	public String getMaxBarcodeStartingWith(@PathVariable String digits) {
+		return anexoService.getMaxBarcodeStartingWith(digits);
 	}
 }

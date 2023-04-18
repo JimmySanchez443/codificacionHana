@@ -1,5 +1,7 @@
 package com.api.codificacion.service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,9 +36,19 @@ public class AnexoService {
 		return anexoRepository.findById(id);
 	}
 
+	// Buscar por sa_anexo
 	public List<Anexo> findBySaAnexo(String sa_anexo) {
 		return anexoRepository.findBySaAnexo(sa_anexo);
+	}
 
+	// Buscar por modelo
+	public List<Anexo> findByUargnsmod(String uargnsmod) {
+		return anexoRepository.findByUargnsmod(uargnsmod);
+	}
+
+	// cantidad, busqueda por modelo
+	public long countByUargnsmod(String uargnsmod) {
+		return anexoRepository.countByUargnsmod(uargnsmod);
 	}
 
 	public Anexo encontrarMayorPorPrefijo(String uargnsmod) {
@@ -67,6 +79,9 @@ public class AnexoService {
 			if (key.equalsIgnoreCase("sa_enviadosap")) {
 				System.out.println("Updating sa_enviadosap");
 				anexo.setSa_enviadosap(value);
+			} else if (key.equalsIgnoreCase("barcode")) {
+				System.out.println("Updating barcode");
+				anexo.setBarcode(value);
 			}
 			save(anexo);
 		} else {
@@ -75,19 +90,31 @@ public class AnexoService {
 		return true;
 	}
 
-	//Listar solo campos id, username, sa_codetipoanexo, Sa_enviadosap, Sa_anexo filtardo por username, sa_codetipoanexo
+	// Listar solo campos id, username, sa_codetipoanexo, Sa_enviadosap, Sa_anexo
+	// filtardo por username, sa_codetipoanexo
 	public List<AnexoProjectionDto> findProjectedByIdAndSa_enviadosap(String username, String sa_codetipoanexo) {
 		return anexoRepository.findProjectedByIdAndSa_enviadosap(username, sa_codetipoanexo);
 	}
 
-	//Listar anexos por username, sa_codetipoanexo, sa_anexo
-	public List<Anexo> findByUsernameAndSaCodetipoanexoAndSaAnexo(String username, String sa_codetipoanexo, String sa_anexo) {
+	// Listar anexos por username, sa_codetipoanexo, sa_anexo
+	public List<Anexo> findByUsernameAndSaCodetipoanexoAndSaAnexo(String username, String sa_codetipoanexo,
+																  String sa_anexo) {
 		return anexoRepository.findByUsernameAndSaCodetipoanexoAndSaAnexo(username, sa_codetipoanexo, sa_anexo);
 	}
 
-	//Valores unicos de sa_anexo por username y sa_codetipoanexo
+	// Valores unicos de sa_anexo por username y sa_codetipoanexo
 	public List<String> findDistinctSa_anexoByUsernameAndSa_codetipoanexo(String username, String sa_codetipoanexo) {
-        return anexoRepository.findDistinctSa_anexoByUsernameAndSa_codetipoanexo(username, sa_codetipoanexo);
-    }
+		return anexoRepository.findDistinctSa_anexoByUsernameAndSa_codetipoanexo(username, sa_codetipoanexo);
+	}
+
+	// Ultimo codigo de barras enviando prefix 10000014
+	public String getMaxBarcodeStartingWith(String digits) {
+		List<Anexo> anexos = anexoRepository.findMaxBarcodeStartingWith(digits);
+		if (!anexos.isEmpty()) {
+			return Collections.max(anexos, Comparator.comparing(Anexo::getBarcode)).getBarcode();
+		} else {
+			return "0";
+		}
+	}
 
 }
